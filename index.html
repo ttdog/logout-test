@@ -2,13 +2,41 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Domain Test</title>
+    <title>Domain Test - Auto Redirect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>ドメイン跨ぎの検証ページ</h1>
-    <p>このドメインは github.io です。</p>
-    <a href="https://spuru.com/logout" style="display:inline-block; padding:20px; background:blue; color:white; text-decoration:none; border-radius:10px;">
+    <h1>自動遷移の検証ページ</h1>
+    <p>ドメイン: github.io</p>
+    <p id="status"><span id="timer">2</span>秒後に自動で spuru.com へ遷移します...</p>
+    <p>※もし動かない場合は、下のボタンを手動で押してください。</p>
+
+    <a id="link" href="https://spuru.com/logout" style="display:inline-block; padding:20px; background:blue; color:white; text-decoration:none; border-radius:10px;">
         spuru.com（アプリ）に戻る
     </a>
+
+    <script>
+        var waitTime = 2000; // ここを 500 や 3000 に変えて検証してください
+        var timeLeft = waitTime / 1000;
+        var timerElement = document.getElementById('timer');
+
+        // カウントダウン表示
+        var countdown = setInterval(function() {
+            timeLeft -= 1;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                document.getElementById('status').innerText = "遷移中...";
+            } else {
+                timerElement.innerText = timeLeft;
+            }
+        }, 1000);
+
+        // 自動遷移の実行
+        setTimeout(function() {
+            var url = document.getElementById('link').href;
+            // JSによる遷移（Universal Linkが発火するかどうかの境目）
+            window.location.href = url;
+        }, waitTime);
+    </script>
 </body>
 </html>
